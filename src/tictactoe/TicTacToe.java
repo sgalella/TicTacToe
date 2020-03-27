@@ -1,8 +1,9 @@
-package game;
+package src.sgalella.tictactoe;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -14,12 +15,8 @@ public class TicTacToe {
 
     private static String playerToken;
     private static String oponentToken;
-    private static Scanner scan;
 
-    /**
-     * Prints the current state of the board.
-     * @param board
-     */
+
     public static void printBoard(String[][] board){
         for (int i = 0; i < board[0].length; i++){
             for (int j = 0; j < board.length; j++){
@@ -45,30 +42,6 @@ public class TicTacToe {
 
     }
 
-    /**
-     * Sets user token to chosen position.
-     * @param board
-     * @param token
-     * @return
-     */
-    public static String[][] setTokenPlayer(String[][] board, String token){
-
-        scan = new Scanner(System.in);
-        int[] position = getPosition(scan.nextLine());
-        int x = position[0];
-        int y = position[1];
-
-        while (board[x][y] != "-"){
-            System.out.print("Please select another position: ");
-            position = getPosition(scan.nextLine());
-            x = position[0];
-            y = position[1];
-        }
-        
-        board[x][y] = token;
-      
-        return board;
-    }
 
     /**
      * Checks if any of the players won the game.
@@ -181,41 +154,47 @@ public class TicTacToe {
         }
 
     }
-    
-    /**
-     * Main.
-     * @param args
-     */
-    public static void main(String[] args) {
 
+    /**
+     * Runs the game.
+     * @param gui
+     */
+
+    public static void run(GUI gui){
         String winner;
         String currentPlayer;
         String[][] board = {{"-","-","-"}, {"-","-","-"}, {"-","-","-"}};
         Random rand = new Random();
         //rand.setSeed(1234); // For reproducibility        
 
-        System.out.println("\nTic-Tac-Toe");
-
         // Choose turns randomly
         if (rand.nextFloat() < 0.5){
-            System.out.println("You move first.");
             currentPlayer = "Player";
             playerToken = "O";
             oponentToken = "X";
         } else {
-            System.out.println("Oponent moves first.");
             currentPlayer = "Oponent";
             playerToken = "X";
             oponentToken = "O";
         }
-        System.out.println("Your token is " + playerToken + ".");
+
+        // Assigns the tokens to each player in the gui
+        gui.setPlayersTokens(playerToken, oponentToken);
+        int numPlayerTokens = gui.getPlayerTokens();
 
         // Game loop
         while (true){
             // Player move
             if (currentPlayer.equals("Player")){
-                System.out.print("\nPlease, choose a position to set your token: ");
-                board = setTokenPlayer(board, playerToken);
+                while (gui.getPlayerTokens() == numPlayerTokens){
+                    // Put a token
+                    try {
+                        Thread.sleep(500);
+                    } catch(InterruptedException e){
+                    }
+                }
+                numPlayerTokens++;
+                board = gui.getBoard();
                 if (checkWinner(board, playerToken)){
                     winner = playerToken;
                     break;
@@ -237,7 +216,7 @@ public class TicTacToe {
                     board[moves[0]][moves[1]] = "-";
                 }
                 board[bestMove[0]][bestMove[1]] = oponentToken;
-                System.out.println("\nOponent moves token to: " + bestMove[0] + " " + bestMove[1]);
+                gui.setTokenBoard(board, bestMove[0], bestMove[1]);
                 if (checkWinner(board, oponentToken)){
                     winner = oponentToken;
                     break;
@@ -249,19 +228,35 @@ public class TicTacToe {
                 winner = "none";
                 break;
             }
-            printBoard(board);
         }
-        
-        // Print final configuration
-        printBoard(board);
 
-        // Print winner
+        // Sets the dialog in the window
+        String dialog;
         if (winner.equals(playerToken)){
-            System.out.println("\nYou win!\n");
+            dialog = "You win! Play again?";
         } else if (winner.equals(oponentToken)){
-            System.out.println("\nYou lose!\n");
-        } else if (winner.equals("none")){
-            System.out.println("\nTie!\n");
+            dialog = "You lose! Play again?";
+        } else {
+            dialog = "You tie! Play again?";
+        }
+
+        // Shows the dialog window, initializes another game or closes the application
+        int output = JOptionPane.showConfirmDialog(null, dialog);
+        if (output == 0){
+            gui.reset();
+            run(gui);
+        } else if (output == 1){
+            System.exit(0);
         }
     }
+    
+    /**
+     * Main.
+     * @param args
+     */
+    public static void main(String[] args) {
+        GUI gui = new GUI();
+        run(gui);
+    }
+     
 }
