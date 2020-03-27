@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 public class TicTacToe {
 
     private static String playerToken;
-    private static String oponentToken;
+    private static String opponentToken;
 
 
     public static void printBoard(String[][] board){
@@ -116,8 +116,8 @@ public class TicTacToe {
         List<int[]> nextPosition;
         int eval, maxEval, minEval;
 
-        if (depth == 0 || checkWinner(board, oponentToken) || checkWinner(board, playerToken) || checkAvailablePositions(board).size() == 0){
-            if (checkWinner(board, oponentToken)){
+        if (depth == 0 || checkWinner(board, opponentToken) || checkWinner(board, playerToken) || checkAvailablePositions(board).size() == 0){
+            if (checkWinner(board, opponentToken)){
                 return 1;
             } else if (checkWinner(board, playerToken)){
                 return -1;
@@ -130,7 +130,7 @@ public class TicTacToe {
             maxEval = -10000;
             nextPosition = checkAvailablePositions(board);
             for(int[] position:nextPosition){
-                board[position[0]][position[1]] = oponentToken;
+                board[position[0]][position[1]] = opponentToken;
                 eval = minimax(board, depth-1, false);
                 if (eval > maxEval){
                     maxEval = eval;
@@ -159,7 +159,6 @@ public class TicTacToe {
      * Runs the game.
      * @param gui
      */
-
     public static void run(GUI gui){
         String winner;
         String currentPlayer;
@@ -171,15 +170,15 @@ public class TicTacToe {
         if (rand.nextFloat() < 0.5){
             currentPlayer = "Player";
             playerToken = "O";
-            oponentToken = "X";
+            opponentToken = "X";
         } else {
-            currentPlayer = "Oponent";
+            currentPlayer = "opponent";
             playerToken = "X";
-            oponentToken = "O";
+            opponentToken = "O";
         }
 
         // Assigns the tokens to each player in the gui
-        gui.setPlayersTokens(playerToken, oponentToken);
+        gui.setPlayersTokens(playerToken, opponentToken);
         int numPlayerTokens = gui.getPlayerTokens();
 
         // Game loop
@@ -199,15 +198,15 @@ public class TicTacToe {
                     winner = playerToken;
                     break;
                 }
-                currentPlayer = "Oponent";
+                currentPlayer = "opponent";
             } 
-            // Oponent move
-            else if (currentPlayer.equals("Oponent")) {
+            // opponent move
+            else if (currentPlayer.equals("opponent")) {
                 List<int[]> possibleMoves = checkAvailablePositions(board);
                 int[] bestMove = new int[2];
                 int maxEval = -10000;
                 for (int[] moves:possibleMoves){
-                    board[moves[0]][moves[1]] = oponentToken;
+                    board[moves[0]][moves[1]] = opponentToken;
                     int eval = minimax(board, 5, false);
                     if (eval > maxEval){
                         maxEval = eval;
@@ -215,10 +214,10 @@ public class TicTacToe {
                     }
                     board[moves[0]][moves[1]] = "-";
                 }
-                board[bestMove[0]][bestMove[1]] = oponentToken;
+                board[bestMove[0]][bestMove[1]] = opponentToken;
                 gui.setTokenBoard(board, bestMove[0], bestMove[1]);
-                if (checkWinner(board, oponentToken)){
-                    winner = oponentToken;
+                if (checkWinner(board, opponentToken)){
+                    winner = opponentToken;
                     break;
                 }
                 currentPlayer = "Player";
@@ -234,7 +233,7 @@ public class TicTacToe {
         String dialog;
         if (winner.equals(playerToken)){
             dialog = "You win! Play again?";
-        } else if (winner.equals(oponentToken)){
+        } else if (winner.equals(opponentToken)){
             dialog = "You lose! Play again?";
         } else {
             dialog = "You tie! Play again?";
