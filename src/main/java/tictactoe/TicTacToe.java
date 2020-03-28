@@ -1,5 +1,6 @@
 package main.java.tictactoe;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -163,6 +164,7 @@ public class TicTacToe {
     public static void run(GUI gui) {
         String winner;
         String currentPlayer;
+        Color colorPlayer, colorOpponent;
         String[][] board = {{"-", "-", "-"}, {"-", "-", "-"}, {"-", "-", "-"}};
         Random rand = new Random();
         //rand.setSeed(1234); // For reproducibility
@@ -171,13 +173,18 @@ public class TicTacToe {
         if (rand.nextFloat() < 0.5) {
             currentPlayer = "Player";
             playerToken = "O";
+            colorPlayer = new Color(135,206, 250);
             opponentToken = "X";
+            colorOpponent = new Color(255,140, 140);
         } else {
             currentPlayer = "opponent";
             playerToken = "X";
+            colorPlayer = new Color(255,140, 140);
             opponentToken = "O";
+            colorOpponent = new Color(135,206, 250);
         }
 
+        System.out.println(currentPlayer);
         // Assigns the tokens to each player in the gui
         gui.setPlayersTokens(playerToken, opponentToken);
         int numPlayerTokens = gui.getPlayerTokens();
@@ -195,7 +202,7 @@ public class TicTacToe {
                 }
                 numPlayerTokens++;
                 board = gui.getBoard();
-                if (gui.checkWinner(board, playerToken)) {
+                if (gui.checkWinner(board, playerToken, colorPlayer)) {
                     winner = playerToken;
                     break;
                 }
@@ -217,7 +224,7 @@ public class TicTacToe {
                 }
                 board[bestMove[0]][bestMove[1]] = opponentToken;
                 gui.setTokenBoard(board, bestMove[0], bestMove[1]);
-                if (gui.checkWinner(board, opponentToken)) {
+                if (gui.checkWinner(board, opponentToken, colorOpponent)) {
                     winner = opponentToken;
                     break;
                 }

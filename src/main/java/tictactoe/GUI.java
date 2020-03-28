@@ -24,7 +24,7 @@ class GUI {
     private final int dimensions = 3;
     private final Field[][] mainPanel;
     private String playerToken;
-    private String oponentToken;
+    private String opponentToken;
     private int numPlayerTokens = 0;
 
     /**
@@ -52,11 +52,12 @@ class GUI {
     /**
      * Sets the token for each player.
      * @param playerToken
-     * @param oponentToken
+     * @param opponentToken
      */
-    void setPlayersTokens(String playerToken, String oponentToken){
+    void setPlayersTokens(String playerToken, String opponentToken){
         this.playerToken = playerToken;
-        this.oponentToken = oponentToken;
+        this.opponentToken = opponentToken;
+        System.out.println("Player token: " + this.playerToken + "Opponent token: " + this.opponentToken);
     }
 
     /**
@@ -65,50 +66,52 @@ class GUI {
      * @param token
      * @return
      */
-    public boolean checkWinner(String[][] board, String token){
+    public boolean checkWinner(String[][] board, String token, Color color){
+
+        System.out.println(color + " " + token + " " + token.getClass());
         // Horizontal
         if (board[0][0].equals(token) && board[0][1].equals(token) && board[0][2].equals(token)){
-            mainPanel[0][0].setBackground(Color.yellow);
-            mainPanel[0][1].setBackground(Color.yellow);
-            mainPanel[0][2].setBackground(Color.yellow);
+            mainPanel[0][0].setBackground(color);
+            mainPanel[0][1].setBackground(color);
+            mainPanel[0][2].setBackground(color);
             return true;
         } else if (board[1][0].equals(token) && board[1][1].equals(token) && board[1][2].equals(token)){
-            mainPanel[1][0].setBackground(Color.yellow);
-            mainPanel[1][1].setBackground(Color.yellow);
-            mainPanel[1][2].setBackground(Color.yellow);
+            mainPanel[1][0].setBackground(color);
+            mainPanel[1][1].setBackground(color);
+            mainPanel[1][2].setBackground(color);
             return true;
         } else if (board[2][0].equals(token) && board[2][1].equals(token) && board[2][2].equals(token)){
-            mainPanel[2][0].setBackground(Color.yellow);
-            mainPanel[2][1].setBackground(Color.yellow);
-            mainPanel[2][2].setBackground(Color.yellow);
+            mainPanel[2][0].setBackground(color);
+            mainPanel[2][1].setBackground(color);
+            mainPanel[2][2].setBackground(color);
             return true;
         }
         // Vertical
         else if (board[0][0].equals(token) && board[1][0].equals(token) && board[2][0].equals(token)){
-            mainPanel[0][0].setBackground(Color.yellow);
-            mainPanel[1][0].setBackground(Color.yellow);
-            mainPanel[2][0].setBackground(Color.yellow);
+            mainPanel[0][0].setBackground(color);
+            mainPanel[1][0].setBackground(color);
+            mainPanel[2][0].setBackground(color);
             return true;
         } else if (board[0][1].equals(token) && board[1][1].equals(token) && board[2][1].equals(token)){
-            mainPanel[0][1].setBackground(Color.yellow);
-            mainPanel[1][1].setBackground(Color.yellow);
-            mainPanel[2][1].setBackground(Color.yellow);
+            mainPanel[0][1].setBackground(color);
+            mainPanel[1][1].setBackground(color);
+            mainPanel[2][1].setBackground(color);
             return true;
         } else if (board[0][2].equals(token) && board[1][2].equals(token) && board[2][2].equals(token)){
-            mainPanel[0][2].setBackground(Color.yellow);
-            mainPanel[1][2].setBackground(Color.yellow);
-            mainPanel[2][2].setBackground(Color.yellow);
+            mainPanel[0][2].setBackground(color);
+            mainPanel[1][2].setBackground(color);
+            mainPanel[2][2].setBackground(color);
             return true;
             // Diagonal
         } else if (board[0][0].equals(token) && board[1][1].equals(token) && board[2][2].equals(token)){
-            mainPanel[0][0].setBackground(Color.yellow);
-            mainPanel[1][1].setBackground(Color.yellow);
-            mainPanel[2][2].setBackground(Color.yellow);
+            mainPanel[0][0].setBackground(color);
+            mainPanel[1][1].setBackground(color);
+            mainPanel[2][2].setBackground(color);
             return true;
         } else if (board[0][2].equals(token) && board[1][1].equals(token) && board[2][0].equals(token)){
-            mainPanel[0][2].setBackground(Color.yellow);
-            mainPanel[1][1].setBackground(Color.yellow);
-            mainPanel[2][0].setBackground(Color.yellow);
+            mainPanel[0][2].setBackground(color);
+            mainPanel[1][1].setBackground(color);
+            mainPanel[2][0].setBackground(color);
             return true;
         }
 
@@ -151,13 +154,13 @@ class GUI {
     }
 
     /**
-     * Sets the oponent token on the board
+     * Sets the opponent token on the board
      */
     void setTokenBoard(String[][] board, int x, int y) {
         for (int i = 0; i < dimensions; i++) {
             for (int j = 0; j < dimensions; j++) {
                 if (i == x && j == y)
-                    mainPanel[i][j].setToken(this.oponentToken);
+                    mainPanel[i][j].setToken(this.opponentToken);
             }
         }
     }
@@ -189,7 +192,7 @@ class GUI {
         }
 
         /**
-         * Sets the token of the player or the oponent.
+         * Sets the token of the player or the opponent.
          * Called at the beginning of each game.
          * @param token
          */
@@ -218,10 +221,10 @@ class GUI {
             int s = 20;
             g2.setStroke(new BasicStroke(3));
 
-            if (this.token.equals(playerToken)){
+            if (this.token.equals("O")){
                 g2.setColor(Color.blue);
                 g2.drawOval(width-radius, height-radius, 2*radius, 2*radius);
-            } else if (this.token.equals(oponentToken)){
+            } else if (this.token.equals("X")){
                 g2.setColor(Color.red);
                 g2.drawLine(width-s, height-s, width+s, height+s);
                 g2.drawLine(width-s, height+s, width+s, height-s);
