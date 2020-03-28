@@ -1,9 +1,8 @@
 package main.java.tictactoe;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import javafx.util.Pair;
+import java.awt.Color;
+import java.util.*;
 import javax.swing.JOptionPane;
 
 
@@ -164,7 +163,8 @@ public class TicTacToe {
     public static void run(GUI gui) {
         String winner;
         String currentPlayer;
-        Color colorPlayer, colorOpponent;
+        Map<Integer[],Integer> mapPositionToValue;
+        List<Integer[]> bestMoves;
         String[][] board = {{"-", "-", "-"}, {"-", "-", "-"}, {"-", "-", "-"}};
         Random rand = new Random();
         //rand.setSeed(1234); // For reproducibility
@@ -173,18 +173,13 @@ public class TicTacToe {
         if (rand.nextFloat() < 0.5) {
             currentPlayer = "Player";
             playerToken = "O";
-            colorPlayer = new Color(135,206, 250);
             opponentToken = "X";
-            colorOpponent = new Color(255,140, 140);
         } else {
             currentPlayer = "opponent";
             playerToken = "X";
-            colorPlayer = new Color(255,140, 140);
             opponentToken = "O";
-            colorOpponent = new Color(135,206, 250);
         }
 
-        System.out.println(currentPlayer);
         // Assigns the tokens to each player in the gui
         gui.setPlayersTokens(playerToken, opponentToken);
         int numPlayerTokens = gui.getPlayerTokens();
@@ -202,7 +197,7 @@ public class TicTacToe {
                 }
                 numPlayerTokens++;
                 board = gui.getBoard();
-                if (gui.checkWinner(board, playerToken, colorPlayer)) {
+                if (gui.checkWinner(board, playerToken)) {
                     winner = playerToken;
                     break;
                 }
@@ -211,20 +206,28 @@ public class TicTacToe {
             // opponent move
             else {
                 List<int[]> possibleMoves = checkAvailablePositions(board);
-                int[] bestMove = new int[2];
-                int maxEval = -10000;
+                Integer[] nextMove = new Integer[2];
+                mapPositionToValue = new HashMap<>();
+                bestMoves = new ArrayList<>();
                 for (int[] moves : possibleMoves) {
                     board[moves[0]][moves[1]] = opponentToken;
-                    int eval = minimax(board, 0, false);
-                    if (eval > maxEval) {
-                        maxEval = eval;
-                        bestMove = moves;
-                    }
+                    int eval = minimax(board, 5, false);
+                    mapPositionToValue.put(new Integer[]{moves[0], moves[1]}, eval);
                     board[moves[0]][moves[1]] = "-";
                 }
-                board[bestMove[0]][bestMove[1]] = opponentToken;
-                gui.setTokenBoard(board, bestMove[0], bestMove[1]);
-                if (gui.checkWinner(board, opponentToken, colorOpponent)) {
+                // Find the best value of the different possible moves
+                int maxValue = Collections.max(mapPositionToValue.values());
+                // Find the best possible moves
+                for(Map.Entry<Integer[],Integer> entry:mapPositionToValue.entrySet()){
+                    if (entry.getValue() == maxValue){
+                        bestMoves.add(entry.getKey());
+                    }
+                }
+                // Retrieve next move
+                nextMove = bestMoves.get(new Random().nextInt(bestMoves.size()));
+                board[nextMove[0]][nextMove[1]] = opponentToken;
+                gui.setTokenBoard(nextMove[0], nextMove[1]);
+                if (gui.checkWinner(board, opponentToken)) {
                     winner = opponentToken;
                     break;
                 }

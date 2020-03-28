@@ -57,7 +57,6 @@ class GUI {
     void setPlayersTokens(String playerToken, String opponentToken){
         this.playerToken = playerToken;
         this.opponentToken = opponentToken;
-        System.out.println("Player token: " + this.playerToken + "Opponent token: " + this.opponentToken);
     }
 
     /**
@@ -66,9 +65,16 @@ class GUI {
      * @param token
      * @return
      */
-    public boolean checkWinner(String[][] board, String token, Color color){
+    public boolean checkWinner(String[][] board, String token){
 
-        System.out.println(color + " " + token + " " + token.getClass());
+        Color color;
+
+        if (token.equals("X")){
+            color = new Color(255,140, 140);
+        } else {
+            color = new Color(135,206, 250);
+        }
+
         // Horizontal
         if (board[0][0].equals(token) && board[0][1].equals(token) && board[0][2].equals(token)){
             mainPanel[0][0].setBackground(color);
@@ -156,7 +162,7 @@ class GUI {
     /**
      * Sets the opponent token on the board
      */
-    void setTokenBoard(String[][] board, int x, int y) {
+    void setTokenBoard(int x, int y) {
         for (int i = 0; i < dimensions; i++) {
             for (int j = 0; j < dimensions; j++) {
                 if (i == x && j == y)
