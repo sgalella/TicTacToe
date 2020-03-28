@@ -1,7 +1,5 @@
 package main.java.tictactoe;
 
-import javafx.util.Pair;
-import java.awt.Color;
 import java.util.*;
 import javax.swing.JOptionPane;
 
@@ -209,9 +207,10 @@ public class TicTacToe {
                 Integer[] nextMove = new Integer[2];
                 mapPositionToValue = new HashMap<>();
                 bestMoves = new ArrayList<>();
+                System.out.println(gui.getDepth());
                 for (int[] moves : possibleMoves) {
                     board[moves[0]][moves[1]] = opponentToken;
-                    int eval = minimax(board, 5, false);
+                    int eval = minimax(board, gui.getDepth(), false);
                     mapPositionToValue.put(new Integer[]{moves[0], moves[1]}, eval);
                     board[moves[0]][moves[1]] = "-";
                 }

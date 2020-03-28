@@ -3,15 +3,15 @@ package main.java.tictactoe;
 import java.awt.Color;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import javax.swing.BorderFactory;
+import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 
 /**
@@ -26,6 +26,7 @@ class GUI {
     private String playerToken;
     private String opponentToken;
     private int numPlayerTokens = 0;
+    private int depth = 0;
 
     /**
      * Initializes GUI.
@@ -44,7 +45,49 @@ class GUI {
             }
         }
 
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menuAbout = new JMenu("About");
+        JMenu menuOptions = new JMenu("Options");
+        menuAbout.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JOptionPane.showMessageDialog(null, "Created by sgalella, 2020", "About",JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        menuBar.add(menuAbout);
+        JMenu difficulty = new JMenu("Difficulty");
+        JMenuItem restart = new JMenuItem("Restart");
+        JMenuItem easy = new JMenuItem("Easy");
+        JMenuItem medium = new JMenuItem("Medium");
+        JMenuItem hard = new JMenuItem("Hard");
+
+        easy.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                depth = 0;
+            }
+        });
+
+        medium.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                depth = 1;
+            }
+        });
+
+        hard.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                depth = 2;
+            }
+        });
+
+        difficulty.add(easy);
+        difficulty.add(medium);
+        difficulty.add(hard);
+        menuOptions.add(difficulty);
+        menuBar.add(menuOptions);
+        frame.setJMenuBar(menuBar);
+
         frame.pack();
+        frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
@@ -57,6 +100,13 @@ class GUI {
     void setPlayersTokens(String playerToken, String opponentToken){
         this.playerToken = playerToken;
         this.opponentToken = opponentToken;
+    }
+
+    /**
+     * Returns game difficulty.
+     */
+    int getDepth(){
+        return depth;
     }
 
     /**
@@ -237,9 +287,6 @@ class GUI {
 
             }
             repaint();
-
         }
-
     }
-
 }
