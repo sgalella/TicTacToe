@@ -1,4 +1,4 @@
-package src.sgalella.tictactoe;
+package main.java.tictactoe;
 
 import java.awt.Color;
 import java.awt.BasicStroke;
@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 
 /**
  * GUI for the Tic-Tac-Toe.
- * 
+ *
  * @Author: sgalella
  */
 class GUI {
@@ -48,7 +48,7 @@ class GUI {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-    
+
     /**
      * Sets the token for each player.
      * @param playerToken
@@ -60,12 +60,69 @@ class GUI {
     }
 
     /**
+     * Checks if any of the players won the game.
+     * @param board
+     * @param token
+     * @return
+     */
+    public boolean checkWinner(String[][] board, String token){
+        // Horizontal
+        if (board[0][0].equals(token) && board[0][1].equals(token) && board[0][2].equals(token)){
+            mainPanel[0][0].setBackground(Color.yellow);
+            mainPanel[0][1].setBackground(Color.yellow);
+            mainPanel[0][2].setBackground(Color.yellow);
+            return true;
+        } else if (board[1][0].equals(token) && board[1][1].equals(token) && board[1][2].equals(token)){
+            mainPanel[1][0].setBackground(Color.yellow);
+            mainPanel[1][1].setBackground(Color.yellow);
+            mainPanel[1][2].setBackground(Color.yellow);
+            return true;
+        } else if (board[2][0].equals(token) && board[2][1].equals(token) && board[2][2].equals(token)){
+            mainPanel[2][0].setBackground(Color.yellow);
+            mainPanel[2][1].setBackground(Color.yellow);
+            mainPanel[2][2].setBackground(Color.yellow);
+            return true;
+        }
+        // Vertical
+        else if (board[0][0].equals(token) && board[1][0].equals(token) && board[2][0].equals(token)){
+            mainPanel[0][0].setBackground(Color.yellow);
+            mainPanel[1][0].setBackground(Color.yellow);
+            mainPanel[2][0].setBackground(Color.yellow);
+            return true;
+        } else if (board[0][1].equals(token) && board[1][1].equals(token) && board[2][1].equals(token)){
+            mainPanel[0][1].setBackground(Color.yellow);
+            mainPanel[1][1].setBackground(Color.yellow);
+            mainPanel[2][1].setBackground(Color.yellow);
+            return true;
+        } else if (board[0][2].equals(token) && board[1][2].equals(token) && board[2][2].equals(token)){
+            mainPanel[0][2].setBackground(Color.yellow);
+            mainPanel[1][2].setBackground(Color.yellow);
+            mainPanel[2][2].setBackground(Color.yellow);
+            return true;
+            // Diagonal
+        } else if (board[0][0].equals(token) && board[1][1].equals(token) && board[2][2].equals(token)){
+            mainPanel[0][0].setBackground(Color.yellow);
+            mainPanel[1][1].setBackground(Color.yellow);
+            mainPanel[2][2].setBackground(Color.yellow);
+            return true;
+        } else if (board[0][2].equals(token) && board[1][1].equals(token) && board[2][0].equals(token)){
+            mainPanel[0][2].setBackground(Color.yellow);
+            mainPanel[1][1].setBackground(Color.yellow);
+            mainPanel[2][0].setBackground(Color.yellow);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Clears the board for a new game.
      */
     void reset() {
         for (int i = 0; i < dimensions; i++) {
             for (int j = 0; j < dimensions; j++) {
                 mainPanel[i][j].setToken("-");
+                mainPanel[i][j].setBackground(Color.white);
             }
         }
         numPlayerTokens = 0;
@@ -96,14 +153,13 @@ class GUI {
     /**
      * Sets the oponent token on the board
      */
-    String[][] setTokenBoard(String[][] board, int x, int y) {
+    void setTokenBoard(String[][] board, int x, int y) {
         for (int i = 0; i < dimensions; i++) {
             for (int j = 0; j < dimensions; j++) {
                 if (i == x && j == y)
                     mainPanel[i][j].setToken(this.oponentToken);
             }
         }
-        return board;
     }
 
     /**
@@ -129,11 +185,11 @@ class GUI {
                 }
 
             });
-            
+
         }
 
         /**
-         * Sets the token of the player or the oponent. 
+         * Sets the token of the player or the oponent.
          * Called at the beginning of each game.
          * @param token
          */
@@ -151,7 +207,7 @@ class GUI {
 
         /**
          * Painting tokens.
-         * 
+         *
          */
         public void paintComponent(Graphics g){
 
@@ -162,16 +218,14 @@ class GUI {
             int s = 20;
             g2.setStroke(new BasicStroke(3));
 
-            if (this.token.equals("-")){
-                // Don't paint
-            } else if (this.token.equals(playerToken)){
+            if (this.token.equals(playerToken)){
                 g2.setColor(Color.blue);
                 g2.drawOval(width-radius, height-radius, 2*radius, 2*radius);
             } else if (this.token.equals(oponentToken)){
                 g2.setColor(Color.red);
                 g2.drawLine(width-s, height-s, width+s, height+s);
                 g2.drawLine(width-s, height+s, width+s, height-s);
-                
+
             }
             repaint();
 
