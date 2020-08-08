@@ -9,7 +9,7 @@ Tic-Tac-Toe implementation using the minimax algorithm.
 </p>
 
 
-## Usage
+## Installation
 
 Compile the code from command line:
 
@@ -17,7 +17,11 @@ Compile the code from command line:
 javac src/main/java/tictactoe/*.java
 ```
 
-Then, run the program:
+
+
+## Usage
+
+Run the program:
 
 ```bash
 java -cp ./src main.java.tictactoe.TicTacToe
