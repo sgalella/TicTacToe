@@ -1,6 +1,6 @@
 # Tic-Tac-Toe
 
-Tic-Tac-Toe implementation using the minimax algorithm.
+[Tic-Tac-Toe](https://en.wikipedia.org/wiki/Tic-tac-toe) implementation using the minimax algorithm.
 
 
 
